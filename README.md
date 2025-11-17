@@ -1,6 +1,10 @@
-# Yushan Platform Admin
+# Yushan Microservices Admin Dashboard
 
-Admin dashboard for the Yushan web novel platform. Built with React, Ant Design, and integrates with the Yushan Microservices.
+> 🛠️ **Admin Dashboard for Yushan Platform (Phase 2 - Microservices)** - Administrative dashboard for the gamified web novel reading platform.
+
+## 📋 Overview
+
+This is the admin dashboard for the microservices architecture of Yushan Platform (Phase 2). This dashboard connects to the API Gateway and communicates with all microservices through the gateway.
 
 ## Features
 
@@ -114,3 +118,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## 🔗 Links
+
+- **API Gateway**: [yushan-microservices-api-gateway](https://github.com/phutruonnttn/yushan-microservices-api-gateway)
+- **Frontend**: [yushan-microservices-frontend](https://github.com/phutruonnttn/yushan-microservices-frontend)
+- **Platform Documentation**: [yushan-platform-docs](https://github.com/phutruonnttn/yushan-platform-docs) - Complete documentation for all phases
+- **Phase 2 Architecture**: See [Phase 2 Microservices Architecture](https://github.com/phutruonnttn/yushan-platform-docs/blob/main/docs/phase2-microservices/PHASE2_MICROSERVICES_ARCHITECTURE.md)
+
+---
+
+**Yushan Microservices Admin Dashboard** - Administrative dashboard for the gamified web novel reading platform 🚀
