@@ -186,9 +186,9 @@ jest.mock('antd', () => {
               'aria-label': 'close',
               onClick: (e) => {
                 e.stopPropagation();
-                onClose && onClose(e),
+                (onClose && onClose(e),
                   // prevent React warning in tests
-                  typeof e.preventDefault === 'function' && e.preventDefault();
+                  typeof e.preventDefault === 'function' && e.preventDefault());
               },
             },
             'close'
