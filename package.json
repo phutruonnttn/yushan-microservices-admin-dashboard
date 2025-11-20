@@ -1,13 +1,13 @@
 {
-  "name": "yushan-platform-admin",
+  "name": "yushan-microservices-admin-dashboard",
   "version": "0.1.0",
   "private": false,
   "license": "MIT",
-  "repository": {
+    "repository": {
     "type": "git",
-    "url": "https://github.com/maugus0/yushan-platform-admin.git"
+    "url": "https://github.com/phutruonnttn/yushan-microservices-admin-dashboard.git"
   },
-  "homepage": "https://maugus0.github.io/yushan-platform-admin",
+  "homepage": "https://phutruonnttn.github.io/yushan-microservices-admin-dashboard",
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
     "@testing-library/dom": "^10.4.1",

@@ -40,7 +40,7 @@ import './App.css';
 
 function App() {
   // Use basename only when deploying to GitHub Pages or PUBLIC_URL is set
-  const basename = process.env.PUBLIC_URL ? '/yushan-platform-admin' : '';
+  const basename = process.env.PUBLIC_URL ? '/yushan-microservices-admin-dashboard' : '';
 
   return (
     <AdminAuthProvider>
