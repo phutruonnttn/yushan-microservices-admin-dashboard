@@ -1,21 +1,11 @@
-# Build stage
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY . .
-
 # Multi-stage build: Node builder -> Nginx runtime
 
 FROM node:18-alpine AS builder
 WORKDIR /app
+
+# Build arguments for environment variables
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 # Install dependencies
 COPY package.json package-lock.json ./
