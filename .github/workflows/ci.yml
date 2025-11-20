@@ -279,10 +279,10 @@ jobs:
           URL="https://phutruonnttn.github.io/yushan-microservices-admin-dashboard/"
           MAX_ATTEMPTS=30
           ATTEMPT=0
-          
+
           echo "Waiting for GitHub Pages to deploy commit $DEPLOYED_SHA..."
           echo "Checking deployment status..."
-          
+
           while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
             ATTEMPT=$((ATTEMPT + 1))
             echo "Attempt $ATTEMPT/$MAX_ATTEMPTS: Checking if GitHub Pages is deployed..."
@@ -320,7 +320,7 @@ jobs:
             fi
             sleep 10
           done
-          
+
           echo "⚠️  GitHub Pages deployment check timeout after $MAX_ATTEMPTS attempts"
           echo "Continuing with health check - it will verify deployment status"
 
