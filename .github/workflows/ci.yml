@@ -281,43 +281,51 @@ jobs:
           ATTEMPT=0
 
           echo "Waiting for GitHub Pages to deploy commit $DEPLOYED_SHA..."
-          echo "Checking deployment status..."
+          echo "Verifying that the latest deployment matches our commit..."
 
           while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
             ATTEMPT=$((ATTEMPT + 1))
-            echo "Attempt $ATTEMPT/$MAX_ATTEMPTS: Checking if GitHub Pages is deployed..."
+            echo "Attempt $ATTEMPT/$MAX_ATTEMPTS: Checking GitHub Pages deployment..."
             
-            # Check if site is accessible
-            if ! curl -fsSLI "$URL" > /dev/null 2>&1; then
-              echo "Site not accessible yet, waiting..."
+            # Step 1: Verify gh-pages branch has our commit SHA
+            CURRENT_GHPAGES_SHA=$(git ls-remote --heads origin gh-pages | awk '{print $1}' | head -n1 || echo "")
+            
+            if [ -z "$CURRENT_GHPAGES_SHA" ] || [ "$CURRENT_GHPAGES_SHA" != "$DEPLOYED_SHA" ]; then
+              echo "gh-pages branch SHA ($CURRENT_GHPAGES_SHA) doesn't match deployed SHA ($DEPLOYED_SHA), waiting..."
               sleep 10
               continue
             fi
             
-            # Check GitHub Pages deployment status via API
-            API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/${{ github.repository }}/pages/builds/latest" 2>/dev/null || echo "")
+            echo "✅ gh-pages branch has correct commit SHA: $DEPLOYED_SHA"
             
-            if [ -n "$API_RESPONSE" ] && echo "$API_RESPONSE" | grep -q '"status"'; then
-              DEPLOYMENT_STATUS=$(echo "$API_RESPONSE" | grep -o '"status":"[^"]*"' | cut -d'"' -f4 || echo "unknown")
+            # Step 2: Wait a bit for GitHub Pages to process the new commit
+            echo "Waiting for GitHub Pages to process the deployment..."
+            sleep 15
+            
+            # Step 3: Check if site is accessible and has valid content
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null || echo "000")
+            
+            if [ "$HTTP_CODE" = "200" ]; then
+              # Fetch HTML content and verify it's valid
+              HTML_CONTENT=$(curl -fsSL "$URL" 2>/dev/null || echo "")
               
-              if [ "$DEPLOYMENT_STATUS" = "built" ]; then
-                echo "✅ GitHub Pages deployment completed (status: built)!"
-                exit 0
+              if [ -n "$HTML_CONTENT" ]; then
+                # Check for valid HTML structure and React app
+                if echo "$HTML_CONTENT" | grep -qE '<!DOCTYPE html|<html' && \
+                   echo "$HTML_CONTENT" | grep -qE 'id="root"|<div id="root"'; then
+                  echo "✅ Site is accessible with valid React app content!"
+                  echo "✅ Deployment verified and ready!"
+                  exit 0
+                else
+                  echo "Site accessible but content not ready yet, waiting..."
+                fi
+              else
+                echo "Site returned 200 but no content, waiting..."
               fi
-              
-              echo "Deployment status: $DEPLOYMENT_STATUS (waiting...)"
             else
-              # Fallback: Check if we can access the site and it's responding
-              if curl -fsSL "$URL" > /dev/null 2>&1; then
-                echo "Site is accessible, assuming deployment is ready..."
-                # Give it a bit more time for CDN propagation
-                sleep 5
-                exit 0
-              fi
-              echo "Could not fetch deployment status, waiting..."
+              echo "Site not accessible yet (HTTP $HTTP_CODE), waiting..."
             fi
+            
             sleep 10
           done
 
